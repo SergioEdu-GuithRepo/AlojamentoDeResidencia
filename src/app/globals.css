@@ -1,0 +1,264 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --mrc-espresso: #0E281E;
+    --mrc-terracotta: #1A4734;
+    --mrc-coral: #3A7D5E;
+    --mrc-blush: #EDF4F0;
+    --mrc-charcoal: #0A1E15;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+  }
+
+  body {
+    background-color: #FFFFFF;
+    color: #0A1E15;
+    font-family: "Avenir Next", "Futura", "Helvetica Neue", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    font-weight: 300;
+    letter-spacing: 0.16em;
+  }
+}
+
+/* High-contrast underline inputs in Emerald Green */
+.mrc-input-underline {
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid rgba(26, 71, 52, 0.45);
+  padding: 0.85rem 0;
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #0A1E15;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.35s ease, transform 0.3s ease;
+}
+
+.mrc-input-underline::placeholder {
+  color: rgba(14, 40, 30, 0.72);
+  font-weight: 400;
+}
+
+.mrc-input-underline:focus {
+  border-bottom-color: #0E281E;
+}
+
+/* Smooth Image Zoom & Hover Transitions */
+.mrc-image-zoom {
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.group:hover .mrc-image-zoom {
+  transform: scale(1.05);
+}
+
+/* Smooth Entrance & Reveal Animations */
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes slowZoom {
+  0% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out both;
+}
+
+.animate-slow-zoom {
+  animation: slowZoom 12s ease-out forwards;
+}
+
+.delay-100 {
+  animation-delay: 120ms;
+}
+
+.delay-200 {
+  animation-delay: 240ms;
+}
+
+.delay-300 {
+  animation-delay: 360ms;
+}
+
+.hover-lift {
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* Custom Scrollbar in Emerald Green */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #EDF4F0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1A4734;
+}
+
+/* =========================================================================
+   EFEITO PARALLAX NO SCROLL
+   - Nativo via CSS Scroll-Driven Animations (Chrome/Edge 115+, Safari 26+)
+   - Fallback JS leve em ParallaxController.tsx (Firefox e browsers antigos)
+   - Usa a propriedade individual `translate` para não colidir com `transform`
+     (zoom lento do hero, hover-zoom das imagens, fade-up de entrada)
+   ========================================================================= */
+
+/* Moldura que recorta a imagem em movimento */
+[data-parallax-frame] {
+  position: relative;
+  overflow: clip;
+}
+
+/* Imagem maior que a moldura para ter margem de deslocamento (±10% de 128%) */
+[data-parallax='media'] {
+  position: absolute;
+  left: 0;
+  top: -14%;
+  width: 100%;
+  height: 128%;
+  object-fit: cover;
+  will-change: translate;
+}
+
+[data-parallax='hero-bg'],
+[data-parallax='hero-content'] {
+  will-change: translate, opacity;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes mrcParallaxMedia {
+      from { translate: 0 -10%; }
+      to   { translate: 0 10%; }
+    }
+
+    @keyframes mrcParallaxHeroBg {
+      from { translate: 0 0; }
+      to   { translate: 0 35%; }
+    }
+
+    @keyframes mrcParallaxHeroContent {
+      from { translate: 0 0; opacity: 1; }
+      to   { translate: 0 -90px; opacity: 0.1; }
+    }
+
+    @keyframes mrcReveal {
+      from { translate: 0 56px; opacity: 0; }
+      to   { translate: 0 0; opacity: 1; }
+    }
+
+    [data-parallax-frame] {
+      view-timeline: --mrc-frame;
+    }
+
+    /* Fotografias full-bleed: deslizam mais devagar que a página */
+    [data-parallax='media'] {
+      animation: mrcParallaxMedia linear both;
+      animation-timeline: --mrc-frame;
+      animation-range: cover 0% cover 100%;
+    }
+
+    /* Vídeo do hero: desce mais devagar enquanto a secção sai do ecrã */
+    [data-parallax='hero-bg'] {
+      animation: mrcParallaxHeroBg linear both;
+      animation-timeline: --mrc-frame;
+      animation-range: exit-crossing 0% exit-crossing 100%;
+    }
+
+    /* Texto do hero: sobe e desvanece suavemente */
+    [data-parallax='hero-content'] {
+      animation: mrcParallaxHeroContent linear both;
+      animation-timeline: --mrc-frame;
+      animation-range: exit-crossing 0% exit-crossing 85%;
+    }
+
+    /* Blocos de texto: aparecem com fade-up ao entrar no ecrã */
+    [data-reveal] {
+      animation: mrcReveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+}
+
+/* =========================================================================
+   CAIXA DE CONFIRMAÇÃO (<dialog> nativo)
+   ========================================================================= */
+.mrc-confirm-dialog {
+  margin: auto;
+  border: none;
+  max-height: calc(100dvh - 2rem);
+  overflow: auto;
+}
+
+.mrc-confirm-dialog::backdrop {
+  background-color: rgba(8, 26, 19, 0.72);
+  backdrop-filter: blur(4px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mrc-confirm-dialog[open] {
+    animation: mrcDialogIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .mrc-confirm-dialog[open]::backdrop {
+    animation: fadeIn 0.28s ease-out;
+  }
+}
+
+@keyframes mrcDialogIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
