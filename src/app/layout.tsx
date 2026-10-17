@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import ParallaxController from '@/components/ParallaxController';
+import SmoothScroll from '@/components/SmoothScroll';
 import { SiteMediaProvider } from '@/components/SiteMediaProvider';
 import { ConfirmProvider } from '@/components/ConfirmDialog';
 import { MediaService, GALERIA_PADRAO } from '@/lib/media';
@@ -39,6 +40,7 @@ export default async function RootLayout({
           </ConfirmProvider>
         </SiteMediaProvider>
         <ParallaxController />
+        <SmoothScroll />
       </body>
     </html>
   );

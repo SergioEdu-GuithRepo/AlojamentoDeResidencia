@@ -31,7 +31,6 @@ import {
   CheckCircle2,
   Lock,
   LogOut,
-  Database,
   PlusCircle,
   Home,
   Trash2,
@@ -173,7 +172,7 @@ export default function AdminDashboardPage() {
 
     try {
       if (!isSupabaseConfigured || !supabase) {
-        setLoginError('Supabase não está configurado. Defina as chaves em .env.local.');
+        setLoginError('Serviço temporariamente indisponível. Contacte o suporte técnico.');
         return;
       }
 
@@ -419,7 +418,7 @@ export default function AdminDashboardPage() {
                   LOGIN ADMINISTRAÇÃO
                 </h1>
                 <p className="text-sm text-mrc-muted font-normal">
-                  Autentique-se para cadastrar residências, gerir reservas em Kwanzas (AOA) e controlar fechaduras inteligentes no Supabase.
+                  Autentique-se para gerir residências, fotografias, reservas e fechaduras inteligentes.
                 </p>
               </div>
 
@@ -468,15 +467,9 @@ export default function AdminDashboardPage() {
                 </button>
               </form>
 
-              <div className="pt-5 border-t border-mrc-terracotta/20 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-mrc-muted">
-                <div className="flex items-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-mrc-terracotta" />
-                  <span>Acesso reservado a administradores autorizados.</span>
-                </div>
-                <span className="inline-flex items-center gap-1.5 font-semibold uppercase tracking-wider text-mrc-terracotta">
-                  <Database className="w-3.5 h-3.5" />
-                  {isSupabaseConfigured ? 'SUPABASE ATIVO' : 'MODO HÍBRIDO'}
-                </span>
+              <div className="pt-5 border-t border-mrc-terracotta/20 flex items-center justify-center gap-1.5 text-xs text-mrc-muted">
+                <ShieldCheck className="w-3.5 h-3.5 text-mrc-terracotta" />
+                <span>Acesso reservado a administradores autorizados.</span>
               </div>
             </div>
           </div>
@@ -500,12 +493,8 @@ export default function AdminDashboardPage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="space-y-2">
               <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold tracking-[0.22em] uppercase text-emerald-300">
-                <Database className="w-3.5 h-3.5" />
-                <span>
-                  {isSupabaseConfigured
-                    ? 'SUPABASE POSTGRESQL CONECTADO EM TEMPO REAL'
-                    : 'MODO HÍBRIDO ATIVO'}
-                </span>
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>ÁREA RESERVADA</span>
               </div>
               <h1 className="font-serif text-3xl md:text-5xl font-normal tracking-[0.08em] uppercase">
                 CENTRO DE OPERAÇÕES &amp; ADMINISTRAÇÃO
@@ -518,7 +507,7 @@ export default function AdminDashboardPage() {
                 className="inline-flex items-center gap-2 border border-white/40 bg-white/10 backdrop-blur-sm hover:bg-white hover:text-mrc-espresso px-5 py-3 text-xs font-semibold tracking-[0.22em] uppercase transition-all"
               >
                 <RefreshCw className="w-4 h-4" />
-                SINCRONIZAR SUPABASE
+                ATUALIZAR DADOS
               </button>
               <button
                 onClick={handleLogout}
